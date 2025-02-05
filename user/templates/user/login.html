@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ログイン</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .error {
+            color: #ff4d4d;
+            background-color: #ffe6e6;
+            border: 1px solid #ff4d4d;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        form {
+            margin-bottom: 15px;
+        }
+        form p {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        button {
+            background-color: #4b79a1;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #3a6381;
+        }
+        .register-link {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .register-link a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        /* 言語選択 */
+        .language-selector {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>ログイン</h2>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <label for="username">ユーザー名:</label>
+        <input type="text" id="username" name="username" required><br><br>
+
+        <label for="password">パスワード:</label>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <button type="submit">ログイン</button>
+
+        <p class="register-link">
+            <a href="{% url 'password_reset' %}">パスワードを忘れた場合はこちら</a>
+        </p>
+
+
+        <!-- 新規登録へのリンク -->
+        <p class="register-link">新規登録がまだの方は<a href="{% url 'register' %}">こちら</a>から登録できます。</p>
+    </div>
+</body>
+</html>

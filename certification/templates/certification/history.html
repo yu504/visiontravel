@@ -1,0 +1,20 @@
+<!-- history.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>画像履歴</title>
+</head>
+<body>
+    <h1>画像アップロード履歴</h1>
+    <ul>
+        {% for image in image_history %}
+            <li>
+                <img src="{{ image.file_url }}" alt="Uploaded Image" width="200">
+            </li>
+        {% empty %}
+            <li>アップロードされた画像はありません。</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

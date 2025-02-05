@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新規登録</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .register-container {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .error {
+            color: #ff4d4d;
+            background-color: #ffe6e6;
+            border: 1px solid #ff4d4d;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        form {
+            margin-bottom: 15px;
+        }
+        form p {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        button {
+            background-color: #4b79a1;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #3a6381;
+        }
+        .login-link {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .login-link a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        /* 注意事項 */
+        .notice {
+            background-color: #f9f9f9;
+            border: 1px solid #dcdcdc;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+            font-size: 14px;
+            color: #333;
+        }
+        .notice ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        .notice ul li {
+            margin-bottom: 10px;
+        }
+        /* 言語選択 */
+        .language-selector {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h1>新規登録</h1>
+
+        <!-- エラーメッセージ -->
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <!-- 注意事項 -->
+        <div class="notice">
+            <h3>新規登録の前にご確認ください</h3>
+            <ul>
+                <li>すでにアカウントをお持ちの方は、新規登録の必要はありません。</li>
+                <li>パスワードは英数字を組み合わせたものを推奨します。</li>
+            </ul>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">登録</button>
+        </form>
+
+        <!-- ログインページへのリンク -->
+        <p class="login-link">
+            すでにアカウントをお持ちの方は<a href="{% url 'login' %}">こちら</a>からログインできます。
+        </p>
+    </div>
+</body>
+</html>

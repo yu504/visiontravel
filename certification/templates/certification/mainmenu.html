@@ -1,0 +1,349 @@
+<!--
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Unified Google Map</title>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaJee3wWa3zhI4Lumrg7qMFOKos4Ki_3g"></script>
+
+<style>
+  html, body { height: 100%; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+  #map { height: 100%; width: 100%; }
+  
+  #settings-icon {
+    position: absolute;
+    top: 40px;
+    right: 5px;
+    cursor: pointer;
+    font-size: 36px;
+    color: #333;
+    border-radius: 50%;
+    padding: 10px;
+    z-index: 10;
+  }
+  
+  #settings-menu {
+    position: absolute;
+    top: 100px;
+    right: 5px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 200px;
+    display: none;
+    z-index: 20;
+  }
+  
+  #settings-menu a {
+    display: block;
+    padding: 8px;
+    text-decoration: none;
+    color: black;
+  }
+  
+  #settings-menu a:hover {
+    background-color: #f0f0f0;
+  }
+</style>
+</head>
+
+<body>
+  <div id="map"></div>
+
+  <div id="settings-icon">⚙️</div>
+
+  <div id="settings-menu">
+    <a href="/certification/upload" id="open-upload">画像アップロード</a>
+    <a href="/user/login" id="logout">ログアウト</a>
+  </div>
+
+<script>
+  // Google Mapsの初期化
+  function initMap() {
+    const mapOptions = {
+      center: new google.maps.LatLng(35.6638, 138.5684),
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    new google.maps.Map(document.getElementById("map"), mapOptions);
+  }
+
+  // 初期化
+  document.addEventListener("DOMContentLoaded", function() {
+    initMap(); // マップを初期化
+  });
+
+  // 設定メニューをトグル
+  document.getElementById("settings-icon").addEventListener("click", function() {
+    const menu = document.getElementById("settings-menu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+  });
+</script>
+</body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Sample_GoogleMap</title>
+ 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaJee3wWa3zhI4Lumrg7qMFOKos4Ki_3g&language={{ language_code }}"></script>
+<style>
+  html, body { height: 100%; margin: 0; padding: 0; }
+  #map { height: 100%; width: 100%; }
+ 
+  #search-bar {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+  }
+ 
+  #search-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding-right: 30px; /* アイコン分のスペースを追加 */
+  }
+ 
+  #search-icon {
+    position: absolute;
+    right: 10px; /* 右端に配置 */
+    cursor: pointer;
+    font-size: 18px;
+    color: #666;
+  }
+ 
+  #settings-icon {
+    position: absolute;
+    top: 50px; /* 画面拡大マークの下に配置 */
+    right: 0px;
+    cursor: pointer;
+    font-size: 36px; /* アイコンを大きくする */
+    color: #333;
+    border-radius: 50%;
+    padding: 10px;
+    z-index: 2; /* 拡大マークよりも下に配置 */
+  }
+ 
+  #settings-menu {
+    position: absolute;
+    top: 105px;
+    right: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 200px;
+    display: none;
+    z-index: 20;
+  }
+ 
+  #settings-menu a {
+    display: block;
+    padding: 8px;
+    text-decoration: none;
+    color: black;
+  }
+ 
+  #settings-menu a:hover {
+    background-color: #f0f0f0;
+  }
+ 
+  #upload-form {
+    display: none;
+    margin-top: 20px;
+  }
+ 
+  /* 言語選択のスタイル */
+  #language-selector {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 999;
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+</style>
+</head>
+ 
+<div id="map"></div>
+ 
+<!-- 検索バー -->
+<div id="search-bar">
+  <input id="search-input" type="text" placeholder="search" />
+  <span id="search-icon">🔍</span> <!-- 虫眼鏡アイコン -->
+</div>
+
+<!-- 設定アイコン（歯車マーク） -->
+<div id="settings-icon">⚙️</div>
+
+<!-- 設定メニュー -->
+<div id="settings-menu">
+  <a href="/certification/upload?lang={{ language_code }}" id="open-upload"></a> <!-- Text will be dynamically set here -->
+  <a href="/user/login" id="logout"></a> <!-- Text will be dynamically set here -->
+</div>
+
+<!-- 画像アップロードフォーム -->
+<div id="upload-form">
+  <h3>画像アップロード</h3>
+  <input type="file" id="file-input" accept="image/*" />
+  <button onclick="uploadImage()">アップロード</button>
+  <p id="upload-result"></p>
+</div>
+
+<script>
+  // 地図の初期化
+  var MyLatLng = new google.maps.LatLng(35.6638, 138.5684);
+  var Options = {
+      zoom: 15,
+      center: MyLatLng,
+      mapTypeId: 'roadmap'
+  };
+  var map = new google.maps.Map(document.getElementById('map'), Options);
+
+  // 検索機能の追加
+  function searchLocation() {
+      var address = document.getElementById('search-input').value;
+      if (address) {
+          var geocoder = new google.maps.Geocoder();
+
+          geocoder.geocode({ 'address': address }, function(results, status) {
+              if (status === 'OK') {
+                  map.setCenter(results[0].geometry.location);
+                  new google.maps.Marker({
+                      map: map,
+                      position: results[0].geometry.location
+                  });
+              } else {
+                  alert('場所を見つけられませんでした: ' + status);
+              }
+          });
+      } else {
+          alert('住所を入力してください。');
+      }
+  }
+
+  // 🔍 アイコンのクリックイベント
+  document.getElementById('search-icon').addEventListener('click', function() {
+      searchLocation();
+  });
+
+  // Enter キーを押したときのイベント
+  document.getElementById('search-input').addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+          searchLocation();
+      }
+  });
+
+  // 設定アイコンのクリックイベント
+  document.getElementById('settings-icon').addEventListener('click', function() {
+      var menu = document.getElementById('settings-menu');
+      menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+  });
+
+  // ログアウトボタンのクリックイベント
+  document.getElementById('logout').addEventListener('click', function(event) {
+      event.preventDefault();
+      alert('ログアウトしました');
+      window.location.href = '/user/login';
+  });
+
+  // アップロードされた画像を処理する関数
+  function uploadImage() {
+      var fileInput = document.getElementById('file-input');
+      var resultText = document.getElementById('upload-result');
+
+      if (fileInput.files && fileInput.files[0]) {
+          var file = fileInput.files[0];
+          var reader = new FileReader();
+
+          reader.onload = function(e) {
+              resultText.innerHTML = 'アップロードした画像: <br><img src="' + e.target.result + '" width="200" />';
+          };
+          reader.readAsDataURL(file);
+      } else {
+          resultText.innerHTML = '画像が選択されていません。';
+      }
+  }
+
+  let currentLanguage = "{{ language_code }}";  // Django から受け取った言語コード
+  console.log("Django から受け取った language_code:", currentLanguage);  // デバッグ用
+
+  // 言語に応じてメニューのテキストを更新する関数
+  function updateMenuText(language) {
+      const menuItems = {
+          ja: {  // 日本語
+              uploadText: "画像アップロード",
+              historyText: "履歴表示",
+              settingsText: "ユーザー情報変更・削除",
+              logoutText: "ログアウト",
+              languageText: "言語選択"
+          },
+          en: {  // 英語
+              uploadText: "Image Upload",
+              logoutText: "Logout",
+          }
+          // 他の言語も追加できます
+      };
+
+      const text = menuItems[language] || menuItems['en']; // 言語が指定されていない場合は英語
+
+      // メニュー項目にテキストを設定
+      document.getElementById('open-upload').textContent = text.uploadText;
+      document.getElementById('logout').textContent = text.logoutText;
+  }
+
+  // ページ読み込み後にメニューのテキストを更新
+  document.addEventListener("DOMContentLoaded", function() {
+      updateMenuText(currentLanguage);
+      loadGoogleMapsScript(currentLanguage);
+  });
+
+  function loadGoogleMapsScript(language) {
+      console.log("Google Maps の言語を更新:", language);
+
+      let oldScript = document.querySelector('script[src*="maps.googleapis.com"]');
+      if (oldScript) {
+          oldScript.remove();
+      }
+
+      document.getElementById("map").innerHTML = ""; // 既存のマップをクリア
+
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCaJee3wWa3zhI4Lumrg7qMFOKos4Ki_3g&language=${language}`;
+      script.async = true;
+      script.defer = true;
+
+      script.onload = function() {
+          initMap();  // マップを再描画
+      };
+
+      document.head.appendChild(script);
+  }
+
+  function initMap() {
+      const MyLatLng = new google.maps.LatLng(35.6638, 138.5684);
+      const Options = {
+          zoom: 15,
+          center: MyLatLng,
+          mapTypeId: 'roadmap'
+      };
+      var map = new google.maps.Map(document.getElementById('map'), Options);
+  }
+
+  window.onload = () => {
+      initMap();  // ページ読み込み時にマップを初期化
+  };
+</script>
+</body>

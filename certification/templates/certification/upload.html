@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>画像アップロード</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f5fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 500px; /* 幅を広げる */
+            width: 500%;
+            padding: 40px; /* 余白はそのまま */
+            margin: 0 auto; /* 中央揃えにする */
+            background-color: #f5f9ff;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            color: #4b4b4b;
+            margin-bottom: 20px;
+        }
+        .upload-box {
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e0e7f1;
+            overflow: hidden;
+        }
+        .upload-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #4b79a1;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #3a6381;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Vision Travel</h2>
+        <form id="upload-form" action="{% url 'upload_image' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="upload-box">
+                <!-- アクセシビリティのためのラベル -->
+                <label for="file-input" title="画像を選択してください">
+                    <!-- プレビュー画像を表示する要素 -->
+                    <img id="preview-image" src="https://via.placeholder.com/200" alt="画像をアップロード" />
+                    <!-- ファイル入力 -->
+                    <input type="file" id="file-input" name="image" accept="image/*" style="display: none;" />
+                </label>
+            </div>
+            <button type="submit">アップロード</button>
+        </form>
+        <!-- 解析結果を表示 -->
+        <div id="analysis-result"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const fileInput = document.getElementById("file-input");
+            const previewImage = document.getElementById("preview-image");
+            const uploadButton = document.querySelector("button[type='submit']");
+
+            // ファイル選択時にプレビューを更新
+            fileInput.addEventListener("change", () => {
+                if (fileInput.files && fileInput.files[0]) {
+                    const file = fileInput.files[0];
+                    const reader = new FileReader();
+
+                    reader.onload = (e) => {
+                        previewImage.src = e.target.result; // プレビュー画像を設定
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // アップロード後の処理 (フォームが送信される前に実行される)
+            uploadButton.addEventListener("click", (event) => {
+                // フォームが正常に送信されるように、submitボタンのデフォルトの動作を抑制する場合
+                // event.preventDefault(); // この行を使う場合、ajaxで非同期に送信することができます。
+
+                // アップロード後のリダイレクトを行うため、フォーム送信をそのまま使用
+            });
+        });
+    </script>
+</body>
+</html>
